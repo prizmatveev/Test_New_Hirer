@@ -1,4 +1,4 @@
-export type Job={id:string;title:string;category:string;department:string;location:string;employmentType:string;skills:string[];description:string;isOpen:boolean};
+export type Job={id:string;title:string;category:string;department:string;location:string;employmentType:string;skills:string[];description:string;openings?:number;customQuestions?:string[];isOpen:boolean};
 export const categories=["Cybersecurity","Marketing","Quality Assurance","Product Management","Data","Social Media","AI Web","Design","AI Graphics","Web Development","App Development","Explore All Roles"];
 export const jobs:Job[]=[
 	{id:"frontend-dev",title:"Frontend Developer",category:"Web Development",department:"Engineering",location:"Remote, US",employmentType:"Internship",skills:["React","TypeScript","Tailwind"],description:"Build polished product UI.",isOpen:true},

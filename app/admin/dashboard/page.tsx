@@ -12,6 +12,8 @@ type Job = {
   experience: string;
   employmentType: string;
   skills: string[];
+  customQuestions: string[];
+  openings: number;
   isOpen: boolean;
 };
 
@@ -46,7 +48,7 @@ export default function AdminDashboard() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [selected, setSelected] = useState<AppRow | null>(null);
-  const [jobForm, setJobForm] = useState({ title: "", category: defaultCategories[0], description: "", location: "", salary: "", experience: experienceOptions[0], employmentType: employmentTypeOptions[1], skills: "" });
+  const [jobForm, setJobForm] = useState({ title: "", category: defaultCategories[0], description: "", location: "", salary: "", experience: experienceOptions[0], employmentType: employmentTypeOptions[1], openings: 1, skills: "", customQuestions: "" });
   const [categories, setCategories] = useState<string[]>(defaultCategories);
   const [skillSuggestions, setSkillSuggestions] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
@@ -115,11 +117,11 @@ export default function AdminDashboard() {
   const addJob = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsedSkills = parseSkills(skillInput || jobForm.skills);
-    await fetch("/api/admin/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...jobForm, skills: parsedSkills, isOpen: true }) });
+    await fetch("/api/admin/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...jobForm, skills: parsedSkills, customQuestions: parseSkills(jobForm.customQuestions), isOpen: true }) });
     const mergedSkills = Array.from(new Set([...skillSuggestions, ...parsedSkills]));
     setSkillSuggestions(mergedSkills);
     localStorage.setItem("admin_skill_suggestions", JSON.stringify(mergedSkills));
-    setJobForm({ title: "", category: categories[0] || defaultCategories[0], description: "", location: "", salary: "", experience: experienceOptions[0], employmentType: employmentTypeOptions[1], skills: "" });
+    setJobForm({ title: "", category: categories[0] || defaultCategories[0], description: "", location: "", salary: "", experience: experienceOptions[0], employmentType: employmentTypeOptions[1], openings: 1, skills: "", customQuestions: "" });
     setSkillInput("");
     await load();
   };
@@ -166,7 +168,7 @@ export default function AdminDashboard() {
     </div>
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div className="card p-4">Total applications: {applications.length}</div>
-      <div className="card p-4">Open positions: {jobs.filter((j) => j.isOpen).length}</div>
+      <div className="card p-4">Open positions: {jobs.filter((j) => j.isOpen && j.openings > 0).length}</div>
       <div className="card p-4">New applicants: {newApplicants}</div>
       <div className="card p-4">Hiring analytics: {hiredRate}% hired</div>
     </div>
@@ -187,17 +189,19 @@ export default function AdminDashboard() {
         <select className="border rounded p-2" value={jobForm.employmentType} onChange={(e) => setJobForm({ ...jobForm, employmentType: e.target.value })}>
           {employmentTypeOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
         </select>
+        <input className="border rounded p-2" type="number" min={0} placeholder="Openings" value={jobForm.openings} onChange={(e) => setJobForm({ ...jobForm, openings: Number(e.target.value) })} required />
         <div className="md:col-span-2 space-y-2">
           <input className="border rounded p-2 w-full" placeholder="Skills comma separated" value={skillInput} onChange={(e) => { setSkillInput(e.target.value); setJobForm({ ...jobForm, skills: e.target.value }); }} onKeyDown={handleSkillsKeyDown} />
           {visibleSkillSuggestions.length > 0 && <div className="flex flex-wrap gap-2">{visibleSkillSuggestions.map((skill) => <button key={skill} type="button" className="text-xs border rounded-full px-2 py-1 hover:bg-[var(--panel)] hover:border-[var(--accent)]" onClick={() => addSuggestedSkill(skill)}>{skill}</button>)}</div>}
         </div>
         <textarea className="border rounded p-2 md:col-span-4" placeholder="Description" value={jobForm.description} onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })} required />
+        <input className="border rounded p-2 md:col-span-4" placeholder="Custom questions comma separated (optional)" value={jobForm.customQuestions} onChange={(e) => setJobForm({ ...jobForm, customQuestions: e.target.value })} />
         <button className="btn-primary md:col-span-1" type="submit">Add Job</button>
       </form>
 
       <div className="grid gap-2">
         {jobs.map((j) => <div key={j.id} className="border rounded p-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-          <span>{j.title} ({j.category}) - {j.location}</span>
+          <span>{j.title} ({j.category}) - {j.location} · Openings: {j.openings}</span>
           <div className="flex gap-2">
             <button className="border rounded px-3 py-1" onClick={async () => { await fetch(`/api/admin/jobs/${j.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ isOpen: !j.isOpen }) }); await load(); }}>{j.isOpen ? "Mark Closed" : "Mark Open"}</button>
             <button className="border rounded px-3 py-1" onClick={async () => { const title = prompt("Edit job title", j.title); if (!title) return; await fetch(`/api/admin/jobs/${j.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title }) }); await load(); }}>Edit</button>
