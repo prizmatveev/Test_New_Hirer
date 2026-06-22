@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="100%" height="100%" fill="#F7FFF0" rx="20"/>
+  <g transform="translate(80,80)">
+    <rect x="80" y="80" width="200" height="160" rx="20" fill="#FFD6E0" />
+    <rect x="360" y="80" width="200" height="160" rx="20" fill="#C8E6FF" />
+    <text x="50%" y="320" dominant-baseline="middle" text-anchor="middle" font-size="28" fill="#274844">Cartoon Illustration 2</text>
+  </g>
+</svg>

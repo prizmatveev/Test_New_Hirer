@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="100%" height="100%" fill="#F0F8FF" rx="20"/>
+  <g transform="translate(80,80)">
+    <rect width="640" height="440" fill="#D0E8FF" rx="16"/>
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="28" fill="#12385A">Static Illustration 2</text>
+  </g>
+</svg>
