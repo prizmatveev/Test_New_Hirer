@@ -6,7 +6,13 @@ export default async function JobDetail({ params }: { params: { id: string } }) 
   let job = null;
 
   try {
-    job = await prisma.job.findUnique({ where: { id: params.id } });
+    job = await prisma.job.findFirst({
+      where: {
+        id: params.id,
+        isOpen: true,
+        openings: { gt: 0 },
+      },
+    });
   } catch {
     job = getJobFallback(params.id);
   }

@@ -18,6 +18,8 @@ async function main() {
         experience: '2+ years experience building React/Next.js or similar applications.',
         employmentType: 'Full Time',
         skills: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS'],
+        openings: 1,
+        customQuestions: [],
         isOpen: true,
       },
       {
@@ -29,6 +31,8 @@ async function main() {
         experience: 'Experience building React Native or Flutter applications.',
         employmentType: 'Full Time',
         skills: ['React Native', 'APIs', 'UI animations', 'Mobile performance'],
+        openings: 1,
+        customQuestions: [],
         isOpen: true,
       },
       {
@@ -40,6 +44,8 @@ async function main() {
         experience: 'Portfolio showing UI and marketing design work.',
         employmentType: 'Part Time',
         skills: ['Figma', 'Illustrator', 'Brand design', 'Layout'],
+        openings: 1,
+        customQuestions: [],
         isOpen: true,
       },
     ],
