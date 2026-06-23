@@ -11,6 +11,7 @@ const jobSelect = {
   experience: true,
   employmentType: true,
   skills: true,
+  customQuestions: true,
   openings: true,
   isOpen: true,
   createdAt: true,
@@ -18,8 +19,7 @@ const jobSelect = {
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   const data = await req.json();
-  const { customQuestions: _customQuestions, ...jobData } = data;
-  const updated = await prisma.job.update({ where: { id: params.id }, data: jobData, select: jobSelect });
+  const updated = await prisma.job.update({ where: { id: params.id }, data, select: jobSelect });
   return NextResponse.json(updated);
 }
 
