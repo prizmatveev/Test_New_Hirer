@@ -17,6 +17,7 @@ type Job = {
   category: string;
   location: string;
   employmentType: string;
+  openings?: number;
 };
 
 export default function Home() {

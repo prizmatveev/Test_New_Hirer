@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import OpenRoles from '@/components/OpenRoles';
-import { getJobsFallback } from '@/lib/job-fallback';
 
 type Props = {
   searchParams: {
@@ -11,16 +10,13 @@ type Props = {
 
 export default async function JobsPage({ searchParams }: Props) {
   const category = searchParams.category?.trim() || 'Explore All Roles';
-  let jobs = [];
-
-  try {
-    jobs = await prisma.job.findMany({
-      where: { isOpen: true },
-      orderBy: { createdAt: 'desc' },
-    });
-  } catch {
-    jobs = getJobsFallback();
-  }
+  const jobs = await prisma.job.findMany({
+    where: {
+      isOpen: true,
+      openings: { gt: 0 },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
 
   const categories = Array.from(
     new Set(['Explore All Roles', ...jobs.map((job) => job.category)]),
