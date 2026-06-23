@@ -26,6 +26,10 @@ type Props = {
 export default async function JobsPage({ searchParams }: Props) {
   const category = searchParams.category?.trim() || 'Explore All Roles';
   const jobs = await prisma.job.findMany({
+    where: {
+      isOpen: true,
+      openings: { gt: 0 },
+    },
     orderBy: { createdAt: 'desc' },
     select: jobSelect,
   });
