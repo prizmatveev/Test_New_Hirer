@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import type { Prisma } from '@prisma/client';
 
 const jobSelect = {
   id: true,
@@ -12,6 +11,7 @@ const jobSelect = {
   experience: true,
   employmentType: true,
   skills: true,
+  customQuestions: true,
   openings: true,
   isOpen: true,
   createdAt: true,
@@ -23,11 +23,9 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const data = await req.json();
-  const { customQuestions: _customQuestions, ...jobData } = data;
-
   return NextResponse.json(
     await prisma.job.create({
-      data: jobData,
+      data,
       select: jobSelect,
     }),
   );

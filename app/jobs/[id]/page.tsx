@@ -11,6 +11,7 @@ const jobSelect = {
   experience: true,
   employmentType: true,
   skills: true,
+  customQuestions: true,
   openings: true,
   isOpen: true,
   createdAt: true,
