@@ -22,8 +22,12 @@ type Props = {
 };
 
 async function getJob(jobId: string) {
-  return prisma.job.findUnique({
-    where: { id: jobId },
+  return prisma.job.findFirst({
+    where: {
+      id: jobId,
+      isOpen: true,
+      openings: { gt: 0 },
+    },
     select: jobSelect,
   });
 }
