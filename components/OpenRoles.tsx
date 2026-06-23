@@ -14,7 +14,7 @@ type Role = {
   category: string;
   location: string;
   employmentType: string;
-  openings?: number;
+  openings: number;
 };
 
 type Props = {
@@ -48,7 +48,7 @@ export default function OpenRoles({ roles }: Props) {
             >
               <h3 className="text-lg font-semibold text-[var(--ink)] mb-2">{role.title}</h3>
               <p className="text-sm text-secondary mb-2">{role.category} · {role.employmentType} · {role.location}</p>
-              <p className="mb-4 text-sm text-secondary">Openings: {Math.max(1, Number(role.openings ?? 1))}</p>
+              <p className="mb-4 text-sm text-secondary">Openings: {role.openings}</p>
               <Link href={`/jobs/${role.id}`} className="inline-flex items-center rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--ink)] transition hover:bg-[var(--hover)]">
                 Apply
               </Link>

@@ -18,13 +18,17 @@ const jobSelect = {
 } as const;
 
 export default async function JobDetail({ params }: { params: { id: string } }) {
-  const job = await prisma.job.findUnique({
-    where: { id: params.id },
+  const job = await prisma.job.findFirst({
+    where: {
+      id: params.id,
+      isOpen: true,
+      openings: { gt: 0 },
+    },
     select: jobSelect,
   });
 
   if (!job) {
-    return <div className='container py-20'>Job not found.</div>;
+    return <div className='container py-20'>Job not found or no longer accepting applications.</div>;
   }
 
   return (
