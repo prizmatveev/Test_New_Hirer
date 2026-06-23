@@ -116,7 +116,7 @@ export default function AdminDashboard() {
   const addJob = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsedSkills = parseSkills(skillInput || jobForm.skills);
-    await fetch("/api/admin/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...jobForm, skills: parsedSkills, isOpen: true }) });
+    await fetch("/api/admin/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...jobForm, skills: parsedSkills, customQuestions: parseSkills(jobForm.customQuestions), isOpen: true }) });
     const mergedSkills = Array.from(new Set([...skillSuggestions, ...parsedSkills]));
     setSkillSuggestions(mergedSkills);
     localStorage.setItem("admin_skill_suggestions", JSON.stringify(mergedSkills));
@@ -194,6 +194,7 @@ export default function AdminDashboard() {
           {visibleSkillSuggestions.length > 0 && <div className="flex flex-wrap gap-2">{visibleSkillSuggestions.map((skill) => <button key={skill} type="button" className="text-xs border rounded-full px-2 py-1 hover:bg-[var(--panel)] hover:border-[var(--accent)]" onClick={() => addSuggestedSkill(skill)}>{skill}</button>)}</div>}
         </div>
         <textarea className="border rounded p-2 md:col-span-4" placeholder="Description" value={jobForm.description} onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })} required />
+        <input className="border rounded p-2 md:col-span-4" placeholder="Custom questions comma separated (optional)" value={jobForm.customQuestions} onChange={(e) => setJobForm({ ...jobForm, customQuestions: e.target.value })} />
         <button className="btn-primary md:col-span-1" type="submit">Add Job</button>
       </form>
 
