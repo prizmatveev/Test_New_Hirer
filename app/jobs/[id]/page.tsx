@@ -1,15 +1,26 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { getJobFallback } from '@/lib/job-fallback';
+
+const jobSelect = {
+  id: true,
+  title: true,
+  category: true,
+  description: true,
+  location: true,
+  salary: true,
+  experience: true,
+  employmentType: true,
+  skills: true,
+  openings: true,
+  isOpen: true,
+  createdAt: true,
+} as const;
 
 export default async function JobDetail({ params }: { params: { id: string } }) {
-  let job = null;
-
-  try {
-    job = await prisma.job.findUnique({ where: { id: params.id } });
-  } catch {
-    job = getJobFallback(params.id);
-  }
+  const job = await prisma.job.findUnique({
+    where: { id: params.id },
+    select: jobSelect,
+  });
 
   if (!job) {
     return <div className='container py-20'>Job not found.</div>;

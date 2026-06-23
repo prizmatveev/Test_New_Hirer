@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
@@ -16,6 +14,7 @@ type Role = {
   category: string;
   location: string;
   employmentType: string;
+  openings?: number;
 };
 
 type Props = {
@@ -48,7 +47,8 @@ export default function OpenRoles({ roles }: Props) {
               className="rounded-3xl border border-[var(--line)] bg-white p-5 shadow-sm"
             >
               <h3 className="text-lg font-semibold text-[var(--ink)] mb-2">{role.title}</h3>
-              <p className="text-sm text-secondary mb-4">{role.category} · {role.employmentType} · {role.location}</p>
+              <p className="text-sm text-secondary mb-2">{role.category} · {role.employmentType} · {role.location}</p>
+              <p className="mb-4 text-sm text-secondary">Openings: {Math.max(1, Number(role.openings ?? 1))}</p>
               <Link href={`/jobs/${role.id}`} className="inline-flex items-center rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--ink)] transition hover:bg-[var(--hover)]">
                 Apply
               </Link>

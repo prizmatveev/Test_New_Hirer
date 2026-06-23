@@ -19,21 +19,19 @@ const jobSelect = {
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export async function GET() {
-  const jobs = await prisma.job.findMany({
+export async function GET(_: Request, { params }: { params: { id: string } }) {
+  const job = await prisma.job.findFirst({
     where: {
+      id: params.id,
       isOpen: true,
       openings: { gt: 0 },
     },
-    orderBy: { createdAt: 'desc' },
     select: jobSelect,
   });
 
-  return NextResponse.json(jobs, {
-    headers: {
-      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-      Pragma: 'no-cache',
-      Expires: '0',
-    },
-  });
+  if (!job) {
+    return NextResponse.json({ error: 'Job not found or no longer accepting applications' }, { status: 404 });
+  }
+
+  return NextResponse.json(job);
 }

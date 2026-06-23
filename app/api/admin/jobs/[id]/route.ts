@@ -1,10 +1,25 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import type { Prisma } from '@prisma/client';
+
+const jobSelect = {
+  id: true,
+  title: true,
+  category: true,
+  description: true,
+  location: true,
+  salary: true,
+  experience: true,
+  employmentType: true,
+  skills: true,
+  openings: true,
+  isOpen: true,
+  createdAt: true,
+} as const;
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
-  const data = (await req.json()) as Prisma.JobUpdateInput;
-  const updated = await prisma.job.update({ where: { id: params.id }, data });
+  const data = await req.json();
+  const { customQuestions: _customQuestions, ...jobData } = data;
+  const updated = await prisma.job.update({ where: { id: params.id }, data: jobData, select: jobSelect });
   return NextResponse.json(updated);
 }
 
@@ -27,7 +42,7 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
       await tx.application.deleteMany({ where: { jobId } });
     }
 
-    await tx.job.delete({ where: { id: jobId } });
+    await tx.job.delete({ where: { id: jobId }, select: { id: true } });
   });
 
   return NextResponse.json({ ok: true });
