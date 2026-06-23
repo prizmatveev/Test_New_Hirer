@@ -1,24 +1,19 @@
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import ApplyForm from '../ApplyForm';
-import { getJobFallback } from '@/lib/job-fallback';
 
 type Props = {
   params: { jobId: string };
 };
 
 async function getJob(jobId: string) {
-  try {
-    return await prisma.job.findFirst({
-      where: {
-        id: jobId,
-        isOpen: true,
-        openings: { gt: 0 },
-      },
-    });
-  } catch {
-    return getJobFallback(jobId);
-  }
+  return prisma.job.findFirst({
+    where: {
+      id: jobId,
+      isOpen: true,
+      openings: { gt: 0 },
+    },
+  });
 }
 
 export default async function ApplyPage({ params }: Props) {

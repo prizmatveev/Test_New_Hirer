@@ -1,21 +1,8 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { getJobFallback } from '@/lib/job-fallback';
 
 export default async function JobDetail({ params }: { params: { id: string } }) {
-  let job = null;
-
-  try {
-    job = await prisma.job.findFirst({
-      where: {
-        id: params.id,
-        isOpen: true,
-        openings: { gt: 0 },
-      },
-    });
-  } catch {
-    job = getJobFallback(params.id);
-  }
+  const job = await prisma.job.findUnique({ where: { id: params.id } });
 
   if (!job) {
     return <div className='container py-20'>Job not found.</div>;
@@ -52,6 +39,17 @@ export default async function JobDetail({ params }: { params: { id: string } }) 
                   </ul>
                 </div>
               </div>
+
+              {job.customQuestions.length > 0 && (
+                <div>
+                  <h2 className='font-semibold mb-3'>Custom Questions</h2>
+                  <ul className='list-disc pl-6 text-secondary space-y-2'>
+                    {job.customQuestions.map((question) => (
+                      <li key={question}>{question}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </section>
 
             <aside className='lg:sticky lg:top-20 space-y-4'>
