@@ -30,6 +30,7 @@ async function main() {
       isOpen: true,
     },
     create: DUMMY_JOB,
+    select: { id: true },
   });
 }
 

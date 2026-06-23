@@ -2,6 +2,21 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import OpenRoles from '@/components/OpenRoles';
 
+const jobSelect = {
+  id: true,
+  title: true,
+  category: true,
+  description: true,
+  location: true,
+  salary: true,
+  experience: true,
+  employmentType: true,
+  skills: true,
+  openings: true,
+  isOpen: true,
+  createdAt: true,
+} as const;
+
 type Props = {
   searchParams: {
     category?: string;
@@ -16,6 +31,7 @@ export default async function JobsPage({ searchParams }: Props) {
       openings: { gt: 0 },
     },
     orderBy: { createdAt: 'desc' },
+    select: jobSelect,
   });
 
   const categories = Array.from(

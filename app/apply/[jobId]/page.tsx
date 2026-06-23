@@ -2,6 +2,21 @@ import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import ApplyForm from '../ApplyForm';
 
+const jobSelect = {
+  id: true,
+  title: true,
+  category: true,
+  description: true,
+  location: true,
+  salary: true,
+  experience: true,
+  employmentType: true,
+  skills: true,
+  openings: true,
+  isOpen: true,
+  createdAt: true,
+} as const;
+
 type Props = {
   params: { jobId: string };
 };
@@ -13,6 +28,7 @@ async function getJob(jobId: string) {
       isOpen: true,
       openings: { gt: 0 },
     },
+    select: jobSelect,
   });
 }
 

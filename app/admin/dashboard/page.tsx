@@ -12,7 +12,6 @@ type Job = {
   experience: string;
   employmentType: string;
   skills: string[];
-  customQuestions: string[];
   openings: number;
   isOpen: boolean;
 };
@@ -48,7 +47,7 @@ export default function AdminDashboard() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [selected, setSelected] = useState<AppRow | null>(null);
-  const [jobForm, setJobForm] = useState({ title: "", category: defaultCategories[0], description: "", location: "", salary: "", experience: experienceOptions[0], employmentType: employmentTypeOptions[1], openings: 1, skills: "", customQuestions: "" });
+  const [jobForm, setJobForm] = useState({ title: "", category: defaultCategories[0], description: "", location: "", salary: "", experience: experienceOptions[0], employmentType: employmentTypeOptions[1], openings: 1, skills: "" });
   const [categories, setCategories] = useState<string[]>(defaultCategories);
   const [skillSuggestions, setSkillSuggestions] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
@@ -121,7 +120,7 @@ export default function AdminDashboard() {
     const mergedSkills = Array.from(new Set([...skillSuggestions, ...parsedSkills]));
     setSkillSuggestions(mergedSkills);
     localStorage.setItem("admin_skill_suggestions", JSON.stringify(mergedSkills));
-    setJobForm({ title: "", category: categories[0] || defaultCategories[0], description: "", location: "", salary: "", experience: experienceOptions[0], employmentType: employmentTypeOptions[1], openings: 1, skills: "", customQuestions: "" });
+    setJobForm({ title: "", category: categories[0] || defaultCategories[0], description: "", location: "", salary: "", experience: experienceOptions[0], employmentType: employmentTypeOptions[1], openings: 1, skills: "" });
     setSkillInput("");
     await load();
   };

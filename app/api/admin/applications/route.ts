@@ -6,7 +6,17 @@ export const revalidate = 0;
 
 export async function GET() {
   const rows = await prisma.application.findMany({
-    include: { user: true, job: true, notes: true },
+    include: {
+      user: true,
+      job: {
+        select: {
+          id: true,
+          title: true,
+          category: true,
+        },
+      },
+      notes: true,
+    },
     orderBy: { createdAt: 'desc' },
   });
 
